@@ -382,7 +382,7 @@ const keyboard = document.querySelector("[data-keyboard]")
 const WORD_LENGTH = 6
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 0, 6)
+const offsetFromDate = new Date(2022, 0, 27)
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
 const player = targetWords[Math.floor(dayOffset)]
@@ -399,11 +399,59 @@ var infoModal = document.getElementById("info")
 var infoBtn = document.getElementById("infoBtn")
 var spanTwo = document.getElementsByClassName("close")[1]
 var span = document.getElementsByClassName("close")[0]
+var hintContainer = document.getElementsByClassName("hint")[0]
+var hintInner = document.getElementsByClassName("hint-inner")[0]
+const hintBack = document.getElementsByClassName("hint-back")[0]
+const tributes = document.querySelectorAll('div.tile.tribute')
+
+
+const playerHint = document.createElement("h3")
+playerHint.textContent = hint
+console.log(playerHint)
+console.log(hintBack)
+hintBack.appendChild(playerHint)
+console.log(tributes)
+
+
+
+hintContainer.addEventListener("click", () => {
+    hintInner.classList.add("rotate")
+    hintBack.classList.remove("rotate")
+    sendTiles(tributes)
+    setTimeout(() => {
+        tributes.forEach((tribute, index) => {
+            tribute.remove()
+        })
+    }, 3500)
+    
+})
+
+function sendTiles(tiles){
+    tiles.forEach((tile, index) => {
+        setTimeout(() => {
+            tile.classList.add("away")
+            tile.addEventListener("animationend", () => {
+            tile.style.visibility = "hidden";
+
+
+        }, {once: true})
+
+
+        }, index * DANCE_ANIMATION_DURATION / 5)
+        
+
+        
+    })
+    
+}
+
 
 
 howToBtn.onclick = function() {
   howToModal.style.display = "block";
 }
+
+
 
 infoBtn.onclick = function() {
     infoModal.style.display = "block";
