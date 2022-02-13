@@ -393,6 +393,36 @@ let checkWordle
 
 
 
+var howToModal = document.getElementById("howTo")
+var howToBtn = document.getElementById("howToBtn")
+var infoModal = document.getElementById("info")
+var infoBtn = document.getElementById("infoBtn")
+var spanTwo = document.getElementsByClassName("close")[1]
+var span = document.getElementsByClassName("close")[0]
+
+
+howToBtn.onclick = function() {
+  howToModal.style.display = "block";
+}
+
+infoBtn.onclick = function() {
+    infoModal.style.display = "block";
+  }
+
+spanTwo.onclick = function() {
+    infoModal.style.display = "none";
+}
+  
+span.onclick = function() {
+  howToModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == howToModal || event.target == infoModal) {
+    howToModal.style.display = "none";
+    infoModal.style.display = "none";
+  }
+}
 
 
   function startInteraction() {
