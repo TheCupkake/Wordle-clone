@@ -17,6 +17,52 @@ h1{
     font-family: "Acme";
 }
 
+
+.image{
+    display: flex;
+    justify-content: center;
+    border-radius: .5em;
+    margin-bottom: 20px;
+}
+
+.image > img {
+    border: 5px inset #2B163E;
+}
+
+.time-container{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    
+
+}
+
+.time{
+    color: white;
+    background-color: #2B163E;
+    padding: 5px;
+    border-radius: .26em;
+    font-family: "acme";
+    font-size: 2em;
+    width: 2em;
+    margin: 1px;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.colon{
+    font-size: 2em;
+    color: #2B163E;
+    font-family: "acme";
+}
+
+h4 {
+    font-family: "acme";
+    font-size: 1.5em;
+    margin-left: 7%;
+}
+
 .keyboard{
     display: grid;
     grid-template-columns: repeat(20, minmax(auto, 1.25em));

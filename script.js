@@ -6,7 +6,6 @@ let targetWords = [
     { "name": "arnold", "hint": "I was the PFA young player of the year in 2020", "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Trent_Alexander-Arnold_2018.jpg/220px-Trent_Alexander-Arnold_2018.jpg"},
     { "name": "telles", "hint": "I have a double L in my name", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Alex_Telles_2021.jpg/220px-Alex_Telles_2021.jpg"},
     { "name": "alonso", "hint": "I have played under Jose Mourinho, Guardiola, Benitez and Ancelotti", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Los_Caminos_del_f%C3%BAtbol._Xabi_Alonso_%2839666777934%29_%28cropped%29.jpg/220px-Los_Caminos_del_f%C3%BAtbol._Xabi_Alonso_%2839666777934%29_%28cropped%29.jpg"},
-    { "name": "alzate", "hint": "I am a midfielder who played for Brighton, Swindon town and Leyton Orient", "image": ""},
     { "name": "areola", "hint": "I have signed for Real Madrid on loan from PSG in 2019", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/2019-07-17_SG_Dynamo_Dresden_vs._Paris_Saint-Germain_by_Sandro_Halank%E2%80%93011_%28cropped%29.jpg/220px-2019-07-17_SG_Dynamo_Dresden_vs._Paris_Saint-Germain_by_Sandro_Halank%E2%80%93011_%28cropped%29.jpg"},
     { "name": "aurier", "hint": "I have won the AFCON in 2015", "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/2020-03-10_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League_Achtelfinale%2C_RB_Leipzig_-_Tottenham_Hotspur_1DX_3707_by_Stepro_%28cropped%29.jpg/220px-2020-03-10_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League_Achtelfinale%2C_RB_Leipzig_-_Tottenham_Hotspur_1DX_3707_by_Stepro_%28cropped%29.jpg"},
     { "name": "ayling", "hint": "I have won the championship in 2020", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Luke_Ayling_with_fan_Nathan_Reynolds_%28July_2020%29_%28cropped%29.jpg/220px-Luke_Ayling_with_fan_Nathan_Reynolds_%28July_2020%29_%28cropped%29.jpg"},
@@ -382,7 +381,9 @@ const keyboard = document.querySelector("[data-keyboard]")
 const WORD_LENGTH = 6
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 0, 29)
+const offsetFromDate = new Date(2022, 1, 8)
+var tomorrow = new Date();
+tomorrow.setHours(24, 0,0,0,0);
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
 const player = targetWords[Math.floor(dayOffset)]
@@ -392,13 +393,47 @@ const image = player.image
 let checkWordle
 
 
+var myFunc = setInterval(function(){
+    var timeLeft = tomorrow - Date.now();
+    var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    if (hours <10){
+        document.getElementById("hours").innerHTML = "0" + hours
+    }
+    else{
+        document.getElementById("hours").innerHTML = hours
+    }
+    
+    if (minutes <10){
+        document.getElementById("minutes").innerHTML = "0" + minutes
+    }
+    else{
+        document.getElementById("minutes").innerHTML = minutes
+    }
+    
+    if (seconds <10){
+        document.getElementById("seconds").innerHTML = "0" + seconds
+    }
+    else{
+        document.getElementById("seconds").innerHTML = seconds
+    }
+}, 1000)
+
+document.getElementsByClassName("image")[1].src = image
+document.getElementsByClassName("image")[1].alt = targetWord
+const playerName = document.getElementsByClassName("player-name")[0]
+var finishModal = document.getElementById("finish")
+
+
 
 var howToModal = document.getElementById("howTo")
 var howToBtn = document.getElementById("howToBtn")
 var infoModal = document.getElementById("info")
 var infoBtn = document.getElementById("infoBtn")
-var spanTwo = document.getElementsByClassName("close")[1]
-var span = document.getElementsByClassName("close")[0]
+var spanThree = document.getElementsByClassName("close")[0]
+var spanTwo = document.getElementsByClassName("close")[2]
+var span = document.getElementsByClassName("close")[1]
 var hintContainer = document.getElementsByClassName("hint")[0]
 var hintInner = document.getElementsByClassName("hint-inner")[0]
 const hintBack = document.getElementsByClassName("hint-back")[0]
@@ -408,10 +443,12 @@ let usedRows = 0
 
 const playerHint = document.createElement("h3")
 playerHint.textContent = hint
-console.log(playerHint)
-console.log(hintBack)
+const playerNameHeader = document.createElement("h3")
+playerNameHeader.textContent = targetWord
+playerName.appendChild(playerNameHeader)
+
 hintBack.appendChild(playerHint)
-console.log(tributes)
+
 
 
 
@@ -463,6 +500,9 @@ infoBtn.onclick = function() {
 spanTwo.onclick = function() {
     infoModal.style.display = "none";
 }
+spanThree.onclick = function() {
+    finishModal.style.display = "none";
+}
   
 span.onclick = function() {
   howToModal.style.display = "none";
@@ -472,6 +512,7 @@ window.onclick = function(event) {
   if (event.target == howToModal || event.target == infoModal) {
     howToModal.style.display = "none";
     infoModal.style.display = "none";
+    finishModal.style.display = "none";
   }
 }
 
@@ -645,7 +686,6 @@ function shakeTiles(tiles){
 
 function checkWinLose(guess, tiles){
     if (guess === targetWord) {
-        showAlert("You Win", 5000)
         danceTiles(tiles)
         hintContainer.removeEventListener("click", flipHint)
 
@@ -667,12 +707,17 @@ function danceTiles(tiles){
             tile.classList.add("dance")
             tile.addEventListener("animationend", () => {
             tile.classList.remove("dance")
+            
 
         }, {once: true})
 
         }, index * DANCE_ANIMATION_DURATION / 5)
+        setTimeout(() => {
+            finishModal.style.display = "block"
+        }, 1000)
         
     })
+
 }
 
 
