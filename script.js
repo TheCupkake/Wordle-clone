@@ -147,7 +147,7 @@ const dictionary = [
   "bowden",
   "bridge",
   "bordao",
-  "bahill",
+  "cahill",
   "carson",
   "cavani",
   "soares",
@@ -382,7 +382,7 @@ const keyboard = document.querySelector("[data-keyboard]")
 const WORD_LENGTH = 6
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 0, 27)
+const offsetFromDate = new Date(2022, 0, 29)
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
 const player = targetWords[Math.floor(dayOffset)]
@@ -403,6 +403,7 @@ var hintContainer = document.getElementsByClassName("hint")[0]
 var hintInner = document.getElementsByClassName("hint-inner")[0]
 const hintBack = document.getElementsByClassName("hint-back")[0]
 const tributes = document.querySelectorAll('div.tile.tribute')
+let usedRows = 0
 
 
 const playerHint = document.createElement("h3")
@@ -414,17 +415,19 @@ console.log(tributes)
 
 
 
-hintContainer.addEventListener("click", () => {
-    hintInner.classList.add("rotate")
-    hintBack.classList.remove("rotate")
-    sendTiles(tributes)
-    setTimeout(() => {
-        tributes.forEach((tribute, index) => {
-            tribute.remove()
-        })
-    }, 3500)
-    
-})
+hintContainer.addEventListener("click", flipHint)
+
+function flipHint() {
+        hintInner.classList.add("rotate")
+        hintBack.classList.remove("rotate")
+        sendTiles(tributes)
+        setTimeout(() => {
+            tributes.forEach((tribute, index) => {
+                tribute.remove()
+            })
+        }, 3500)
+
+}
 
 function sendTiles(tiles){
     tiles.forEach((tile, index) => {
@@ -554,13 +557,21 @@ function submitGuess(){
         return word + tile.dataset.letter
     }, "")
     if (!dictionary.includes(guess)) {
-        showAlert("Not in word list")
+        showAlert("Not a player")
         shakeTiles(activeTiles)
         return
     }
 
     stopInteraction()
     activeTiles.forEach((...params) => flipTiles(...params, guess))
+    usedRows +=1 
+    console.log(usedRows)
+    if (usedRows >= 4) {
+        hintContainer.removeEventListener("click", flipHint)
+        document.getElementsByClassName("hint-front ")[0].style.backgroundColor = "grey"
+        document.getElementsByClassName("hint-front ")[0].style.color = "lightgrey"
+        document.getElementsByClassName("hint-front ")[0].style.cursor = "default"
+    }
 
 }
 
@@ -636,6 +647,8 @@ function checkWinLose(guess, tiles){
     if (guess === targetWord) {
         showAlert("You Win", 5000)
         danceTiles(tiles)
+        hintContainer.removeEventListener("click", flipHint)
+
         stopInteraction()
         return
     }
@@ -643,6 +656,7 @@ function checkWinLose(guess, tiles){
     const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
     if (remainingTiles.length === 0){
         showAlert(targetWord.toUpperCase(), null)
+        hintContainer.removeEventListener("click", flipHint)
         stopInteraction()
     }
 }

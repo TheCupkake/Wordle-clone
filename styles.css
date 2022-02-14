@@ -116,11 +116,13 @@ h1{
 li{
     color:hsl(200, 1%, 34%);
     margin-bottom: .5em;
+    font-size: 1.3em;
 }
 
 p{
     color:hsl(200, 1%, 34%);
     line-height: 1.5em;
+    font-size: 1.3em;
 }
 
 .tile{
@@ -136,6 +138,23 @@ p{
     justify-content: center;
     align-items: center;
     user-select: none;
+
+    transition: transform 250ms linear;
+}
+
+.mock-tile{
+    color: white;
+    font-family: "Acme";
+    background-color: hsl(115, 29%, 43%);
+    border-radius: .3em;
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+
 
     transition: transform 250ms linear;
 }
@@ -182,7 +201,7 @@ p{
    
 
     100% {
-        transform: translateY(500%) rotate(90deg);
+        transform: translateY(1100%) rotate(100deg);
     }
 
 }
@@ -377,49 +396,7 @@ hr{
     cursor: pointer;
   }
 
-@media screen and (max-width: 600px) {
-    .key{
-        height: 13vw;
-    }
 
-
-    .key.large{
-        
-    }
-
-    .keyboard{
-        gap: 3em .4em;
-    }
-
-    hr{
-        margin-bottom: 20px;
-    }
-
-    .header{
-        height: 50px;
-    }
-
-    .guess-grid{
-        margin-bottom: 20px;
-        gap: 1.7em;
-    }
-
-    #hint-container{
-        width: 90vw;
-        height: 10vw;
-    }
-
-    .modal-content{
-        width: 80%;
-    }
-
-    .tile{
-        width: 14vw;
-        aspect-ratio: 1;
-    }
-
-
-  }
 
   h2, h3{
       display: flex;
@@ -487,3 +464,44 @@ hr{
     justify-content: center;
     margin-bottom: 1.5em;
 }
+
+@media screen and (max-width: 600px) {
+    .key{
+        height: 13vw;
+    }
+
+
+    .keyboard{
+        gap: 3em .4em;
+    }
+
+    hr{
+        margin-bottom: 20px;
+    }
+
+    .header{
+        height: 50px;
+    }
+
+    .guess-grid{
+        margin-bottom: 20px;
+        gap: 1.7em;
+    }
+
+    .hint{
+        width: 80vw;
+        margin-top: 4px;
+    }
+
+    .modal-content{
+        width: 80%;
+    }
+
+    .tile{
+        width: 13.5vw;
+        height: 13.5vw;
+    }
+
+
+}
+   
