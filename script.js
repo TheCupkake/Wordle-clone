@@ -278,6 +278,7 @@ const dictionary = [
   "stegen",
   "hazard",
   "umtiti",
+  "traore",
   "albiol",
   "asenjo",
   "borges",
