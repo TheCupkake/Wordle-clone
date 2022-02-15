@@ -1,3 +1,4 @@
+
 let targetWords = [
     { "name": "ramsey" , "hint": "I have won the FA Cup 3 times", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Aaron_Ramsey_2019.jpg/220px-Aaron_Ramsey_2019.jpg"},
     { "name": "aarons", "hint": "I have played over 100 games for Norwich City", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Max_Aarons_2021-08-07_1.jpg/220px-Max_Aarons_2021-08-07_1.jpg"},
@@ -351,6 +352,7 @@ const dictionary = [
  
 ]
 
+storage = window.localStorage
 
 
 function shuffle(array){
@@ -372,8 +374,6 @@ function shuffle(array){
 }
 
 //shuffle(targetWords)
-//console.log(targetWords)
-
 
 const FLIP_ANIMATION_DURATION = 500
 const DANCE_ANIMATION_DURATION = 500
@@ -388,9 +388,66 @@ const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
 const player = targetWords[Math.floor(dayOffset)]
 const targetWord = player.name
+let recordedGuess = ""
+let states = ""
+
+
+if(localStorage.getItem('player') != targetWord){
+    localStorage.clear()
+}
+
+else {
+    if(localStorage.getItem('wonToday') === 'yes') {
+        var finishModal = document.getElementById("finish")
+        finishModal.style.display = 'block'
+        populatePage()
+        
+    }
+    else if(localStorage.getItem('lostToday') === 'yes') {
+        showAlert(targetWord.toUpperCase(), null)
+        populatePage()
+        
+    }
+
+}
+
+function populatePage() {
+    const prevGuesses = localStorage.getItem('guesses')
+    const prevStates = localStorage.getItem('states')
+    const prevTweet = localStorage.getItem('tweet')
+    const prevTiles = document.querySelectorAll(".tile")
+    document.getElementById("tweet").href = prevTweet
+    for (let i = 0; i < prevGuesses.length; i++){
+        prevTiles[i].textContent = prevGuesses[i]
+        if (prevStates[i] === "c"){
+            prevTiles[i].dataset.state = "correct"
+        }
+        
+        else if (prevStates[i] === "l"){
+            prevTiles[i].dataset.state = "wrong-location"
+        }
+
+        else{
+            prevTiles[i].dataset.state = "wrong"
+        }
+    }
+
+}
+
+localStorage.setItem('player', targetWord)
+
+
 const hint = player.hint
 const image = player.image
 let checkWordle
+let tweet = "http://www.twitter.com/share?text="
+
+
+const tweetElement = document.getElementById("tweet")
+tweet += "Who+Am+I++"
+tweet += "%2D++"
+tweet += Math.floor(dayOffset)
+tweet += "%0D%0A"
 
 
 var myFunc = setInterval(function(){
@@ -425,7 +482,8 @@ document.getElementsByClassName("image")[1].alt = targetWord
 const playerName = document.getElementsByClassName("player-name")[0]
 var finishModal = document.getElementById("finish")
 
-
+console.log(localStorage.getItem('guesses'))
+console.log(localStorage.getItem('states'))
 
 var howToModal = document.getElementById("howTo")
 var howToBtn = document.getElementById("howToBtn")
@@ -467,6 +525,7 @@ function flipHint() {
 }
 
 function sendTiles(tiles){
+    tweet += "%0D%0AViewed+Hint+👓"
     tiles.forEach((tile, index) => {
         setTimeout(() => {
             tile.classList.add("away")
@@ -478,7 +537,7 @@ function sendTiles(tiles){
 
 
         }, index * DANCE_ANIMATION_DURATION / 5)
-        
+       
 
         
     })
@@ -597,6 +656,9 @@ function submitGuess(){
     const guess = activeTiles.reduce((word, tile) => {
         return word + tile.dataset.letter
     }, "")
+    recordedGuess += guess
+    console.log(recordedGuess)
+
     if (!dictionary.includes(guess)) {
         showAlert("Not a player")
         shakeTiles(activeTiles)
@@ -606,7 +668,7 @@ function submitGuess(){
     stopInteraction()
     activeTiles.forEach((...params) => flipTiles(...params, guess))
     usedRows +=1 
-    console.log(usedRows)
+    tweet += "%0D%0A"
     if (usedRows >= 4) {
         hintContainer.removeEventListener("click", flipHint)
         document.getElementsByClassName("hint-front ")[0].style.backgroundColor = "grey"
@@ -634,15 +696,21 @@ function flipTiles(tile, index, array, guess) {
             tile.dataset.state = "correct"
             key.classList.add("correct")
             checkWordle = checkWordle.replace(letter, '')
+            states += "c"
+            tweet += "🟩"
             
         } else if (checkWordle.indexOf(letter) != -1){
             tile.dataset.state = "wrong-location"
             key.classList.add("wrong-location")
             checkWordle = checkWordle.replace(letter, '')
+            tweet += "🟨"
+            states += "l"
             
         } else {
             tile.dataset.state = "wrong"
             key.classList.add("wrong")
+            tweet += "⬛"
+            states += "w"
         }
 
         if (index === array.length -1) {
@@ -688,6 +756,13 @@ function checkWinLose(guess, tiles){
     if (guess === targetWord) {
         danceTiles(tiles)
         hintContainer.removeEventListener("click", flipHint)
+        tweetElement.href= tweet
+        localStorage.setItem('wonToday', 'yes')
+        localStorage.setItem('guesses', recordedGuess)
+        localStorage.setItem('states', states)
+        localStorage.setItem('tweet', tweet)
+       
+
 
         stopInteraction()
         return
@@ -697,6 +772,12 @@ function checkWinLose(guess, tiles){
     if (remainingTiles.length === 0){
         showAlert(targetWord.toUpperCase(), null)
         hintContainer.removeEventListener("click", flipHint)
+        localStorage.setItem('lostToday', 'yes')
+        localStorage.setItem('guesses', recordedGuess)
+        localStorage.setItem('states', states)
+        localStorage.setItem('tweet', tweet)
+        
+        
         stopInteraction()
     }
 }
@@ -722,4 +803,7 @@ function danceTiles(tiles){
 
 
 
+
 startInteraction()
+
+
