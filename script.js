@@ -122,6 +122,22 @@ let targetWords = [
   
   ]
 const dictionary = [
+  "devrij",
+  "deligt",
+  "cardoz",
+  "nissen",
+  "okafor",
+  "tijani",
+  "guindo",
+  "smicer",
+  "kewell",
+  "hamann",
+  "coates",
+  "inacio",
+  "esgaio",
+  "feddal",
+  "tabata",
+  "santos",
   "pjanic",
   "ashley",
   "ramsey",
@@ -704,8 +720,7 @@ function submitGuess(){
     const guess = activeTiles.reduce((word, tile) => {
         return word + tile.dataset.letter
     }, "")
-    recordedGuess += guess
-    console.log(recordedGuess)
+    
 
     if (!dictionary.includes(guess)) {
         showAlert("Not a player")
@@ -713,6 +728,8 @@ function submitGuess(){
         return
     }
 
+
+    recordedGuess += guess
     stopInteraction()
     activeTiles.forEach((...params) => flipTiles(...params, guess))
     usedRows +=1 
