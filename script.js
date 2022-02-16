@@ -17,7 +17,7 @@ let targetWords = [
     { "name": "traore", "hint": "I have been described as lightning quick but perhaps lacking composure or an end product", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Adama_Traore_Wolves_vs_Man_U_2020-01-04_%28cropped%29.jpg/220px-Adama_Traore_Wolves_vs_Man_U_2020-01-04_%28cropped%29.jpg"},
     { "name": "aurier", "hint": "I have won the AFCON in 2015", "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/2020-03-10_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League_Achtelfinale%2C_RB_Leipzig_-_Tottenham_Hotspur_1DX_3707_by_Stepro_%28cropped%29.jpg/220px-2020-03-10_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League_Achtelfinale%2C_RB_Leipzig_-_Tottenham_Hotspur_1DX_3707_by_Stepro_%28cropped%29.jpg"},
     { "name": "carson", "hint": "I have played for both Man City and Liverpool", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Carson%2C_Scott.jpg/220px-Carson%2C_Scott.jpg"},
-    { "name": "soares", "hint": "I have won the EUROs and spent 5 years at Southampton", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Edinson_Cavani_2018.jpg/220px-Edinson_Cavani_2018.jpg"},
+    { "name": "soares", "hint": "I have won the EUROs and spent 5 years at Southampton", "image": "https://upload.wikimedia.org/wikipedia/commons/8/85/C%C3%A9dric_%28cropped%29_2.jpg"},
     { "name": "baines", "hint": "I was Everton's captain and twice their player of the season", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Baines_Leighton_126176_%28cropped%29.jpg/200px-Baines_Leighton_126176_%28cropped%29.jpg"},
     { "name": "fofana", "hint": "A Premier League game was paused for me to break my fast in Ramadan", "image": "https://i2-prod.leicestermercury.co.uk/sport/football/football-news/article5325081.ece/ALTERNATES/s810/1_Wesley-Fofana.jpg"},
     { "name": "cornet", "hint": "I scored 51 goals for Lyon", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/France_-_England_U19%2C_20150331_15.jpg/220px-France_-_England_U19%2C_20150331_15.jpg"},
@@ -89,7 +89,7 @@ let targetWords = [
     { "name": "thomas", "hint": "I am a former Premier League winger", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Jerome_Thomas.jpg/220px-Jerome_Thomas.jpg"},
     { "name": "tomori", "hint": "I have played for Chelsea and AC Milan", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tomori_vs_Liverpool_2019_%28cropped%29.jpg/220px-Tomori_vs_Liverpool_2019_%28cropped%29.jpg"},
     { "name": "torres", "hint": "I have won the World Cup and the Euros but never won a league title", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tomori_vs_Liverpool_2019_%28cropped%29.jpg/220px-Tomori_vs_Liverpool_2019_%28cropped%29.jpg"},
-    { "name": "varane", "hint": "I have won the league, champions league and the world cup", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tomori_vs_Liverpool_2019_%28cropped%29.jpg/220px-Tomori_vs_Liverpool_2019_%28cropped%29.jpg"},
+    { "name": "varane", "hint": "I have won the league, champions league and the world cup", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Rapha%C3%ABl_Varane_2018_%28cropped%29.jpg/220px-Rapha%C3%ABl_Varane_2018_%28cropped%29.jpg"},
     { "name": "modric", "hint": "I have played over 250 league games for Real Madrid", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Luka_Modric_Interview_2021_%28cropped%29.jpg/220px-Luka_Modric_Interview_2021_%28cropped%29.jpg"},
     { "name": "vlasic", "hint": "I have played over 30 games for Croatia", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Nikola_Vla%C5%A1i%C4%87_%28CSKA_Moscow%2C_19.08.2019%29.jpg/220px-Nikola_Vla%C5%A1i%C4%87_%28CSKA_Moscow%2C_19.08.2019%29.jpg"},
     { "name": "walker", "hint": "I was in the PFA Team of the Year 3 times", "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Kyle_Walker.jpg/220px-Kyle_Walker.jpg"},
@@ -122,6 +122,7 @@ let targetWords = [
   
   ]
 const dictionary = [
+  "pjanic",
   "ashley",
   "ramsey",
   "aarons",
@@ -351,7 +352,11 @@ const dictionary = [
   "howard",
   "seaman",
   "hyypia",
-  "powell"
+  "powell",
+  "becker",
+  "moraes",
+  "essien",
+  "zenden"
 
  
 ]
@@ -385,7 +390,7 @@ const keyboard = document.querySelector("[data-keyboard]")
 const WORD_LENGTH = 6
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 1, 5)
+const offsetFromDate = new Date(2022, 1, 15)
 var tomorrow = new Date();
 tomorrow.setHours(24, 0,0,0,0);
 const msOffset = Date.now() - offsetFromDate
@@ -403,7 +408,8 @@ function check() {
     else {
         if(localStorage.getItem('wonToday') === 'yes') {
             var finishModal = document.getElementById("finish")
-            finishModal.style.display = 'block'
+            finishModal.classList.add("fade-in")
+            finishModal.style.display = "block";
             populatePage()
             stopInteraction()
             
@@ -514,7 +520,8 @@ let usedRows = 0
 const playerHint = document.createElement("h3")
 playerHint.textContent = hint
 const playerNameHeader = document.createElement("h3")
-playerNameHeader.textContent = targetWord
+
+playerNameHeader.textContent = targetWord.charAt(0).toUpperCase() + targetWord.slice(1)
 playerName.appendChild(playerNameHeader)
 
 hintBack.appendChild(playerHint)
@@ -559,31 +566,58 @@ function sendTiles(tiles){
 
 
 howToBtn.onclick = function() {
+  //howToModal.style.display = "block";
+  howToModal.classList.add("fade-in")
   howToModal.style.display = "block";
 }
 
 
 
 infoBtn.onclick = function() {
+    infoModal.classList.add("fade-in")
     infoModal.style.display = "block";
   }
 
 spanTwo.onclick = function() {
-    infoModal.style.display = "none";
+    infoModal.classList.remove("fade-in")
+    infoModal.classList.add("fade-out")
+    setTimeout(() => {
+        infoModal.style.display = "none"
+        infoModal.classList.remove("fade-out")
+    }, 250)
 }
 spanThree.onclick = function() {
-    finishModal.style.display = "none";
+    finishModal.classList.remove("fade-in")
+    finishModal.classList.add("fade-out")
+    setTimeout(() => {
+        finishModal.style.display = "none"
+        finishModal.classList.remove("fade-out")
+    }, 250)
 }
   
 span.onclick = function() {
-  howToModal.style.display = "none";
+  howToModal.classList.remove("fade-in")
+  howToModal.classList.add("fade-out")
+  setTimeout(() => {
+        howToModal.style.display = "none"
+        howToModal.classList.remove("fade-out")
+    }, 250)
 }
 
 window.onclick = function(event) {
   if (event.target == howToModal || event.target == infoModal) {
-    howToModal.style.display = "none";
-    infoModal.style.display = "none";
-    finishModal.style.display = "none";
+    howToModal.classList.remove("fade-in")
+    howToModal.classList.add("fade-out")
+    setTimeout(() => {
+            howToModal.style.display = "none"
+            howToModal.classList.remove("fade-out")
+    }, 250)
+    infoModal.classList.remove("fade-in")
+    infoModal.classList.add("fade-out")
+    setTimeout(() => {
+        infoModal.style.display = "none"
+        infoModal.classList.remove("fade-out")
+    }, 250)
   }
 }
 
@@ -644,6 +678,7 @@ function pressKey(key){
     const nextTile =guessGrid.querySelector(":not([data-letter])")
     nextTile.dataset.letter = key.toLowerCase()
     nextTile.textContent = key
+    nextTile.classList.add("press")
     nextTile.dataset.state = "active"
 }
 
@@ -652,6 +687,7 @@ function deleteKey(){
     const lastTile = activeTiles[activeTiles.length-1]
     if (lastTile == null) return
     lastTile.textContent = ""
+    lastTile.classList.remove("press")
     delete lastTile.dataset.state
     delete lastTile.dataset.letter
 }
@@ -681,7 +717,7 @@ function submitGuess(){
     activeTiles.forEach((...params) => flipTiles(...params, guess))
     usedRows +=1 
     tweet += "%0D%0A"
-    if (usedRows >= 4) {
+    if (usedRows >= 5) {
         hintContainer.removeEventListener("click", flipHint)
         document.getElementsByClassName("hint-front ")[0].style.backgroundColor = "grey"
         document.getElementsByClassName("hint-front ")[0].style.color = "lightgrey"
@@ -768,6 +804,7 @@ function checkWinLose(guess, tiles){
     if (guess === targetWord) {
         danceTiles(tiles)
         hintContainer.removeEventListener("click", flipHint)
+        tweet += "%0D%0A%0D%0Ahttps%3A%2F%2Fwhomi%2Eonline"
         tweetElement.href= tweet
         localStorage.setItem('wonToday', 'yes')
         localStorage.setItem('guesses', recordedGuess)
@@ -806,7 +843,8 @@ function danceTiles(tiles){
 
         }, index * DANCE_ANIMATION_DURATION / 5)
         setTimeout(() => {
-            finishModal.style.display = "block"
+            finishModal.classList.add("fade-in")
+            finishModal.style.display = "block";
         }, 1000)
         
     })
