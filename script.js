@@ -625,6 +625,7 @@ function submitGuess(){
 }
 
 function flipTiles(tile, index, array, guess) {
+    //disable hint when tiles are being flipped
     hintContainer.removeEventListener("click", flipHint)
 
 

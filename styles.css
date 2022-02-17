@@ -667,8 +667,8 @@ h1{
 /* tile animations */
 @keyframes press {
     50% {
-        transform: scale(1.2);
-        border: 5px solid black;
+        transform: scale(1.05);
+        border: 1px solid black;
 
     }
 
