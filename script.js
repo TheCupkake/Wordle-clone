@@ -283,7 +283,7 @@ const keyboard = document.querySelector("[data-keyboard]")
 const WORD_LENGTH = 6
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 1, 15)
+const offsetFromDate = new Date(2022, 9, 30)
 let tomorrow = new Date();
 tomorrow.setHours(24, 0,0,0,0);
 const msOffset = Date.now() - offsetFromDate
